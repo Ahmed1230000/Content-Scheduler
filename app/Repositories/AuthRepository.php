@@ -19,9 +19,19 @@ class AuthRepository
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
             ]);
+
             if ($user && isset($data['platforms']) && is_array($data['platforms'])) {
                 $user->platforms()->sync($data['platforms']);
             }
+
+            activity('auth')
+                ->causedBy($user)
+                ->withProperties([
+                    'email' => $user->email,
+                    'platforms' => $data['platforms'] ?? []
+                ])
+                ->log('User registered');
+
             return $user;
         });
     }
@@ -29,13 +39,30 @@ class AuthRepository
     public function login(array $data)
     {
         return $this->handleError(function () use ($data) {
-            return Auth::attempt($data);
+            $attempt = Auth::attempt($data);
+
+            if ($attempt) {
+                $user = Auth::user();
+                activity('auth')
+                    ->causedBy($user)
+                    ->withProperties(['email' => $user->email])
+                    ->log('User logged in');
+            }
+
+            return $attempt;
         });
     }
 
     public function logout()
     {
         return $this->handleError(function () {
+            $user = Auth::user();
+
+            activity('auth')
+                ->causedBy($user)
+                ->withProperties(['email' => $user?->email])
+                ->log('User logged out');
+
             Auth::logout();
             request()->session()->invalidate();
             request()->session()->regenerateToken();
