@@ -20,4 +20,4 @@ This project is a simplified content scheduling application built with Laravel. 
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/content-scheduler.git
+   https://github.com/Ahmed1230000/Content-Scheduler.git
