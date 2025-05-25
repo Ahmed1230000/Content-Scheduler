@@ -41,4 +41,33 @@ activity('auth')
     ->causedBy($user)
     ->withProperties(['email' => $user->email])
     ->log('User logged in');
+```
+
+
+   ### 🔍 Filtering with Spatie Query Builder
+To enable advanced filtering functionality in the posts listing, I used the spatie/laravel-query-builder package.
+
+- **This allows filtering user posts based on:
+- **Status (draft, scheduled, published)
+- **Date
+- **Platform
+
+It keeps the controller clean and ensures that query logic is flexible and secure
+
+### Example usage:
+```php
+use Spatie\QueryBuilder\QueryBuilder;
+
+$posts = QueryBuilder::for(Post::class)
+    ->allowedFilters(['status', 'platform_id'])
+    ->where('user_id', auth()->id())
+    ->get();
+```
+### Example request:
+```bash
+GET /posts?filter[status]=scheduled&filter[platform_id]=1
+```
+
+
+
 
