@@ -41,26 +41,26 @@ Each event is logged using the `activity()` helper, associating the action with 
 
 #### Example usage:
 
-````php
+```php
 activity('auth')
     ->causedBy($user)
     ->withProperties(['email' => $user->email])
     ->log('User logged in');
-````
+```
 
+### 🔍 Filtering with Spatie Query Builder
 
-#### 🔍 Filtering with Spatie Query Builder
 To enable advanced filtering functionality in the posts listing, I used the spatie/laravel-query-builder package.
 
-- **This allows filtering user posts based on:
-- **Status (draft, scheduled, published)
-- **Date
-- **Platform
+-   \*\*This allows filtering user posts based on:
+-   \*\*Status (draft, scheduled, published)
+-   \*\*Date
+-   \*\*Platform
 
-It keeps the controller clean and ensures that query logic is flexible and secure.
+It keeps the controller clean and ensures that query logic is flexible and secure
 
+### Example usage:
 
-#### Example usage:
 ```php
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -75,4 +75,3 @@ $posts = QueryBuilder::for(Post::class)
 ```bash
 GET /posts?filter[status]=scheduled&filter[platform_id]=1
 ```
-
