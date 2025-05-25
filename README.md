@@ -21,3 +21,24 @@ This project is a simplified content scheduling application built with Laravel. 
 1. Clone the repository:
    ```bash
    https://github.com/Ahmed1230000/Content-Scheduler.git
+   ```
+   
+   ### 📝 Activity Logging
+
+I implemented activity logging using the [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog) package to track important user actions within the system. This helps in monitoring user behavior and debugging issues efficiently.
+
+The logging functionality was applied inside the `AuthRepository` following the **Repository Pattern**. The following events are recorded:
+
+- **User Registration**: Logs the newly registered user's email and selected platforms.
+- **User Login**: Logs the email of the user who logged in.
+- **User Logout**: Logs when a user logs out.
+
+Each event is logged using the `activity()` helper, associating the action with the authenticated user and storing relevant properties.
+
+#### Example usage:
+```php
+activity('auth')
+    ->causedBy($user)
+    ->withProperties(['email' => $user->email])
+    ->log('User logged in');
+
